@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -14,7 +15,7 @@ import (
 	"github.com/here-Leslie-Lau/victorialogs-tool/cfgs"
 )
 
-const baseJSON = "../cfgs/base.json"
+const baseJSON = "cfgs/base.json"
 
 // QueryLogs is a function that queries logs from the victoriametrics database
 func QueryLogs() ([]byte, error) {
@@ -45,7 +46,7 @@ func QueryLogs() ([]byte, error) {
 }
 
 func reqToVictoria(cfg *cfgs.Config) ([]byte, error) {
-	req, err := http.NewRequest("POST", cfg.URL, bytes.NewBuffer(buildParams(cfg)))
+	req, err := http.NewRequest(http.MethodPost, cfg.URL, bytes.NewBuffer(buildParams(cfg)))
 	if err != nil {
 		return nil, err
 	}
@@ -76,17 +77,23 @@ func buildParams(cfg *cfgs.Config) []byte {
 	}
 	// build query params
 	params.Query += "_time:" + cfg.LastDuration
-	params.Query += " " + cfg.Query
-	params.Query += " topic:" + cfg.Topic
-	params.Query += " caller:" + cfg.Caller
-	params.Query += " _stream:" + string(streamStr)
-	params.Query += " level:" + cfg.Level
+	params.Query += ` ` + cfg.Query
+	params.Query += ` topic:` + cfg.Topic
+	params.Query += ` caller:` + cfg.Caller
+	params.Query += ` _stream:` + string(streamStr)
+	params.Query += ` level:` + cfg.Level
 
-	params.Query += " | fields " + strings.Join(cfg.Fileds, ",")
-	params.Query += " | sort by (_time) desc"
+	params.Query += ` | fields ` + strings.Join(cfg.Fileds, ",")
+	params.Query += ` | sort by (_time) desc`
 
 	fmt.Println("Query: ", params.Query)
 
+	// url encode
+	encode := url.QueryEscape(params.Query)
+	params.Query = strings.ReplaceAll(encode, "+", "%20")
+
+	a, _ := json.Marshal(params)
+	fmt.Printf("Params: %+v\n", string(a))
 	byt, _ := json.Marshal(params)
 	return byt
 }
