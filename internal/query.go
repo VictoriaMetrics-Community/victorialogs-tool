@@ -46,54 +46,51 @@ func QueryLogs() ([]byte, error) {
 }
 
 func reqToVictoria(cfg *cfgs.Config) ([]byte, error) {
-	req, err := http.NewRequest(http.MethodPost, cfg.URL, bytes.NewBuffer(buildParams(cfg)))
+	req, err := http.NewRequest(http.MethodPost, cfg.URL, bytes.NewBufferString(buildParams(cfg)))
 	if err != nil {
 		return nil, err
 	}
 
 	// set headers
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	// maybe we can set timeout to cfg
 	cli := &http.Client{Timeout: 30 * time.Second}
 
 	resp, err := cli.Do(req)
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
+
 	return b, nil
 }
 
-func buildParams(cfg *cfgs.Config) []byte {
-	streamStr, _ := json.Marshal(cfg.Stream)
-
-	params := cfgs.RequestParams{
-		Limit: cfg.Limit,
-		Start: cfg.Start,
-		End:   cfg.End,
-	}
+func buildParams(cfg *cfgs.Config) string {
 	// build query params
-	params.Query += "_time:" + cfg.LastDuration
-	params.Query += ` ` + cfg.Query
-	params.Query += ` topic:` + cfg.Topic
-	params.Query += ` caller:` + cfg.Caller
-	params.Query += ` _stream:` + string(streamStr)
-	params.Query += ` level:` + cfg.Level
+	var query string
+	query += "_time:" + cfg.LastDuration
+	query += " " + cfg.Query
+	query += " topic:" + cfg.Topic
+	query += " caller:" + cfg.Caller
+	query += " _stream:" + "{service=" + `"` + cfg.Stream.Service + `"}`
+	query += " level:" + cfg.Level
 
-	params.Query += ` | fields ` + strings.Join(cfg.Fileds, ",")
-	params.Query += ` | sort by (_time) desc`
+	query += " | fields " + strings.Join(cfg.Fileds, ",")
+	query += " | sort by (_time) desc"
 
-	fmt.Println("Query: ", params.Query)
-
+	fmt.Println("Query:", query)
 	// url encode
-	encode := url.QueryEscape(params.Query)
-	params.Query = strings.ReplaceAll(encode, "+", "%20")
+	query = strings.ReplaceAll(url.QueryEscape(query), "+", "%20")
 
-	a, _ := json.Marshal(params)
-	fmt.Printf("Params: %+v\n", string(a))
-	byt, _ := json.Marshal(params)
-	return byt
+	// time format to ts
+	start, _ := time.Parse(time.RFC3339, cfg.Start)
+	end, _ := time.Parse(time.RFC3339, cfg.End)
+
+	// manually construct the form
+	return fmt.Sprintf("query=%s&limit=%d&start=%d&end=%d", query, cfg.Limit, start.Unix(), end.Unix())
 }
