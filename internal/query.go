@@ -8,8 +8,11 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"sort"
 	"strings"
+	"sync"
 	"time"
+	"unsafe"
 
 	"github.com/BurntSushi/toml"
 	"github.com/here-Leslie-Lau/victorialogs-tool/cfgs"
@@ -18,7 +21,7 @@ import (
 const baseJSON = "cfgs/base.json"
 
 // QueryLogs is a function that queries logs from the victoriametrics database
-func QueryLogs() ([]byte, error) {
+func QueryLogs() ([]string, error) {
 	// Read the toml file
 	byt, err := os.ReadFile(baseJSON)
 	if err != nil {
@@ -38,17 +41,73 @@ func QueryLogs() ([]byte, error) {
 	}
 
 	// send request to victoria
-	b, err := reqToVictoria(cfg)
-	if err != nil {
-		return nil, err
+	// batch send request by start and end
+	configs := splitRequest(cfg)
+	wg := sync.WaitGroup{}
+	var list []string
+
+	for _, config := range configs {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			res, err := reqToVictoria(config)
+			if err != nil {
+				fmt.Println("Error:", err)
+				return
+			}
+			list = append(list, res)
+		}()
 	}
-	return b, nil
+	wg.Wait()
+
+	// order the result by num
+	if cfg.Sort == cfgs.SortTypeDesc {
+		// desc
+		sort.Slice(list, func(i, j int) bool {
+			return configs[i].Num > configs[j].Num
+		})
+	} else {
+		// default is asc
+		sort.Slice(list, func(i, j int) bool {
+			return configs[i].Num < configs[j].Num
+		})
+
+	}
+
+	return list, nil
 }
 
-func reqToVictoria(cfg *cfgs.Config) ([]byte, error) {
+func splitRequest(cfg *cfgs.Config) []*cfgs.Config {
+	// split the request by start and end
+	var res []*cfgs.Config
+	start, _ := time.Parse(time.RFC3339, cfg.Start)
+	end, _ := time.Parse(time.RFC3339, cfg.End)
+
+	var num int
+	// split by 1 hour
+	for start.Before(end) {
+		// copy the cfg
+		c := *cfg
+		c.Num = num
+		num++
+		// case: 不足一小时的情况
+		if end.Sub(start) < time.Hour {
+			res = append(res, &c)
+			break
+		}
+
+		c.Start = start.Format(time.RFC3339)
+		start = start.Add(time.Hour)
+		c.End = start.Format(time.RFC3339)
+		res = append(res, &c)
+	}
+	return res
+}
+
+func reqToVictoria(cfg *cfgs.Config) (string, error) {
 	req, err := http.NewRequest(http.MethodPost, cfg.URL, bytes.NewBufferString(buildParams(cfg)))
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	// set headers
@@ -58,16 +117,17 @@ func reqToVictoria(cfg *cfgs.Config) ([]byte, error) {
 
 	resp, err := cli.Do(req)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	defer resp.Body.Close()
 
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return b, nil
+	str := *(*string)(unsafe.Pointer(&b))
+	return str, nil
 }
 
 func buildParams(cfg *cfgs.Config) string {
@@ -81,7 +141,11 @@ func buildParams(cfg *cfgs.Config) string {
 	query += " level:" + cfg.Level
 
 	query += " | fields " + strings.Join(cfg.Fileds, ",")
-	query += " | sort by (_time) desc"
+	if cfg.Sort == cfgs.SortTypeDesc {
+		query += " | sort by (_time) desc"
+	} else {
+		query += " | sort by (_time) asc"
+	}
 
 	fmt.Println("Query:", query)
 	// url encode

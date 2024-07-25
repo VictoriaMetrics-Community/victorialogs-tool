@@ -5,10 +5,15 @@ type Config struct {
 	Topic  string `toml:"topic" json:"topic"`
 	Caller string `toml:"caller" json:"caller"`
 
-	LastDuration string `toml:"last_duration" json:"last_duration"`
-	Start        string `toml:"start" json:"start"`
-	End          string `toml:"end" json:"end"`
-	Limit        int64  `toml:"limit" json:"limit"`
+	LastDuration string   `toml:"last_duration" json:"last_duration"`
+	Start        string   `toml:"start" json:"start"`
+	End          string   `toml:"end" json:"end"`
+	Limit        int64    `toml:"limit" json:"limit"`
+	Sort         SortType `toml:"sort" json:"sort"`
+
+	StartTs int64 `json:"-"`
+	EndTs   int64 `json:"-"`
+	Num     int   `json:"-"`
 
 	Query string `toml:"query" json:"query"`
 	Level string `toml:"level" json:"level"`
@@ -16,6 +21,13 @@ type Config struct {
 	Stream Stream   `toml:"stream" json:"_stream"`
 	Fileds []string `toml:"fileds" json:"fileds"`
 }
+
+type SortType string
+
+const (
+	SortTypeAsc  SortType = "asc"
+	SortTypeDesc SortType = "desc"
+)
 
 type Stream struct {
 	Service string `toml:"service"`

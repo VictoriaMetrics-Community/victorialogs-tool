@@ -18,14 +18,16 @@ var queryCmd = &cobra.Command{
 	The query source comes from the configuration file set by the 'vtools setcfg' command.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		byt, err := internal.QueryLogs()
+		list, err := internal.QueryLogs()
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
 		}
 
 		// Result
-		fmt.Println(string(byt))
+		for _, res := range list {
+			fmt.Println(res)
+		}
 	},
 }
 
