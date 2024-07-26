@@ -1,6 +1,8 @@
 # victorialogs-tool
 [English](https://github.com/here-Leslie-Lau/victorialogs-tool) | 简体中文
 
+![image_01](image_01.jpg)
+
 一个用于查询 victoria-logs 的工具(你会爱上它)
 
 基于toml配置文件查询，将查询结果集输出至终端
@@ -61,8 +63,6 @@ vtool setcfg xxx/i-love-coding.toml
 配置文件参考: https://github.com/here-Leslie-Lau/victorialogs-tool/blob/master/cfgs/example.toml
 
 2. 运行`vtool query`即可
-
-![image_01](image_01.jpg)
 
 ## 贡献
 
