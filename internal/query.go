@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/user"
+	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
@@ -18,12 +20,17 @@ import (
 	"github.com/here-Leslie-Lau/victorialogs-tool/cfgs"
 )
 
-const baseJSON = "cfgs/base.json"
-
 // QueryLogs is a function that queries logs from the victoriametrics database
 func QueryLogs() ([]string, error) {
+	// generated configuration file path
+	user, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+	homeDir := user.HomeDir
+	p := filepath.Join(homeDir, "vtool.json")
 	// Read the toml file
-	byt, err := os.ReadFile(baseJSON)
+	byt, err := os.ReadFile(p)
 	if err != nil {
 		return nil, err
 	}

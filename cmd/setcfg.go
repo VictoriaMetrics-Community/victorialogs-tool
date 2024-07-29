@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"os/user"
+	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -36,12 +38,20 @@ var setcfgCmd = &cobra.Command{
 }
 
 func saveTomlToBase(filePath string) error {
+	// generated configuration file path
+	user, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+	homeDir := user.HomeDir
+	p := filepath.Join(homeDir, "vtool.json")
+
 	var base struct {
 		Base string `json:"base"`
 	}
 	base.Base = filePath
 
-	file, err := os.OpenFile("cfgs/base.json", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	file, err := os.OpenFile(p, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
