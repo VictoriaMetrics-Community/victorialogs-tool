@@ -3,7 +3,7 @@ package internal
 import (
 	"testing"
 
-	"github.com/here-Leslie-Lau/victorialogs-tool/cfgs"
+	"github.com/VictoriaMetrics-Community/victorialogs-tool/cfgs"
 )
 
 func TestBuildParams(t *testing.T) {

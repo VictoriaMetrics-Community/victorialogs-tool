@@ -1,5 +1,5 @@
 # victorialogs-tool
-English | [简体中文](https://github.com/here-Leslie-Lau/victorialogs-tool/blob/master/README_CN.md)
+English | [简体中文](https://github.com/VictoriaMetrics-Community/victorialogs-tool/blob/master/README_CN.md)
 
 ![image_01](image_01.jpg)
 
@@ -11,7 +11,7 @@ Query based on TOML configuration files and output the result set to the termina
 
 - Simple and easy-to-use command-line interface
 - Various combined query methods
-- Supports large time range queries (logs within a month, or even more, can be easily retrieved)
+- Supports large time range queries (logs from several days, or even more, can be easily retrieved)
 - Based on TOML configuration files, allowing multiple configuration files for switching queries, similar to session storage.
 - Result set output to the terminal, allowing you to use tools like `grep`, `awk`, `>` and more
 
@@ -22,13 +22,13 @@ Make sure you have the Go environment installed on your computer.
 Option 1:
 
 ```bash
-go install github.com/here-Leslie-Lau/victorialogs-tool@latest && mv $GOPATH/bin/victorialogs-tool $GOPATH/bin/vtool
+go install github.com/VictoriaMetrics-Community/victorialogs-tool@latest && mv $GOPATH/bin/victorialogs-tool $GOPATH/bin/vtool
 ```
 
 Option 2:
 
 ```bash
-git clone git@github.com:here-Leslie-Lau/victorialogs-tool.git
+git clone git@github.com:VictoriaMetrics-Community/victorialogs-tool.git
 make build
 ```
 
@@ -62,7 +62,7 @@ vtool setcfg xxx/i-love-coding.toml
 
 This command will generate a `vtool.json` file in the home directory to store the path of the configuration file.
 
-Configuration file reference: https://github.com/here-Leslie-Lau/victorialogs-tool/blob/master/cfgs/example.toml
+Configuration file reference: https://github.com/VictoriaMetrics-Community/victorialogs-tool/blob/master/cfgs/example.toml
 
 2. Then, run `vtool query`.
 
