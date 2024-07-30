@@ -1,4 +1,4 @@
-module github.com/here-Leslie-Lau/victorialogs-tool
+module github.com/VictoriaMetrics-Community/victorialogs-tool
 
 go 1.22.0
 

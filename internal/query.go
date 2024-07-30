@@ -17,7 +17,7 @@ import (
 	"unsafe"
 
 	"github.com/BurntSushi/toml"
-	"github.com/here-Leslie-Lau/victorialogs-tool/cfgs"
+	"github.com/VictoriaMetrics-Community/victorialogs-tool/cfgs"
 )
 
 // QueryLogs is a function that queries logs from the victoriametrics database

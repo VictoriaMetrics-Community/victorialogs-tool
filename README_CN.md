@@ -1,5 +1,5 @@
 # victorialogs-tool
-[English](https://github.com/here-Leslie-Lau/victorialogs-tool) | 简体中文
+[English](https://github.com/VictoriaMetrics-Community/victorialogs-tool) | 简体中文
 
 ![image_01](image_01.jpg)
 
@@ -11,7 +11,7 @@
 
 - 简单易用的命令行界面
 - 多种组合查询方式
-- 支持大范围的时间查询(1个月内的日志数据也可手到擒来，甚至更多)
+- 支持大范围的时间查询(几天内的日志数据也可手到擒来，甚至更多)
 - 基于toml配置文件, 可多个配置文件切换查询，类似于session存储
 - 结果集输出至终端，可发挥你的想象力，配合`grep`、`awk`、`>`等工具使用
 
@@ -22,13 +22,13 @@
 选项一:
 
 ```bash
-go install github.com/here-Leslie-Lau/victorialogs-tool@latest && mv $GOPATH/bin/victorialogs-tool $GOPATH/bin/vtool
+go install github.com/VictoriaMetrics-Community/victorialogs-tool@latest && mv $GOPATH/bin/victorialogs-tool $GOPATH/bin/vtool
 ```
 
 选项二:
 
 ```bash
-git clone git@github.com:here-Leslie-Lau/victorialogs-tool.git
+git clone git@github.com:VictoriaMetrics-Community/victorialogs-tool.git
 make build
 ```
 
@@ -62,7 +62,7 @@ vtool setcfg xxx/i-love-coding.toml
 
 该命令会在家目录下生成一个`vtool.json`的文件, 用于存储配置文件的路径
 
-配置文件参考: https://github.com/here-Leslie-Lau/victorialogs-tool/blob/master/cfgs/example.toml
+配置文件参考: https://github.com/VictoriaMetrics-Community/victorialogs-tool/blob/master/cfgs/example.toml
 
 2. 运行`vtool query`即可
 

@@ -6,7 +6,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/here-Leslie-Lau/victorialogs-tool/internal"
+	"github.com/VictoriaMetrics-Community/victorialogs-tool/internal"
 	"github.com/spf13/cobra"
 )
 
