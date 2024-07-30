@@ -143,7 +143,9 @@ func buildParams(cfg *cfgs.Config) string {
 	query += "_time:" + cfg.LastDuration
 	query += " " + cfg.Query
 	query += " topic:" + cfg.Topic
-	query += " caller:" + cfg.Caller
+	if cfg.Caller != "" {
+		query += " caller:" + cfg.Caller
+	}
 	query += " _stream:" + "{service=" + `"` + cfg.Stream.Service + `"}`
 	query += " level:" + cfg.Level
 
