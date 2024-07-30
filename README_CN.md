@@ -22,7 +22,7 @@
 选项一:
 
 ```bash
-go install github.com/here-Leslie-Lau/victorialogs-tool@latest && mv $GOPATH/bin/cmd $GOPATH/bin/vtool
+go install github.com/here-Leslie-Lau/victorialogs-tool@latest && mv $GOPATH/bin/victorialogs-tool $GOPATH/bin/vtool
 ```
 
 选项二:

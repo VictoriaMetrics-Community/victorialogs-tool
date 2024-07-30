@@ -22,7 +22,7 @@ Make sure you have the Go environment installed on your computer.
 Option 1:
 
 ```bash
-go install github.com/here-Leslie-Lau/victorialogs-tool@latest && mv $GOPATH/bin/cmd $GOPATH/bin/vtool
+go install github.com/here-Leslie-Lau/victorialogs-tool@latest && mv $GOPATH/bin/victorialogs-tool $GOPATH/bin/vtool
 ```
 
 Option 2:
