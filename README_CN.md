@@ -12,7 +12,7 @@
 - 简单易用的命令行界面
 - 多种组合查询方式
 - 支持大范围的时间查询(1个月内的日志数据也可手到擒来，甚至更多)
-- 基于toml配置文件, 可多个配置文件切换查询
+- 基于toml配置文件, 可多个配置文件切换查询，类似于session存储
 - 结果集输出至终端，可发挥你的想象力，配合`grep`、`awk`、`>`等工具使用
 
 ## 安装
@@ -59,6 +59,8 @@ Use "victorialogs-tool [command] --help" for more information about a command.
 ```bash
 vtool setcfg xxx/i-love-coding.toml
 ```
+
+该命令会在家目录下生成一个`vtool.json`的文件, 用于存储配置文件的路径
 
 配置文件参考: https://github.com/here-Leslie-Lau/victorialogs-tool/blob/master/cfgs/example.toml
 
