@@ -43,6 +43,7 @@ Usage:
 
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
+  currcfg     Get the absolute path of the current configuration file.
   help        Help about any command
   query       query logs from victoriametrics
   setcfg      Set up the configuration file for query logs
@@ -65,6 +66,8 @@ vtool setcfg xxx/i-love-coding.toml
 配置文件参考: https://github.com/VictoriaMetrics-Community/victorialogs-tool/blob/master/cfgs/example.toml
 
 2. 运行`vtool query`即可
+
+*tips: 你可以使用`vtool currcfg`命令查看当前配置文件的绝对路径*
 
 ## 贡献
 
