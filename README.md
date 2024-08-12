@@ -39,7 +39,7 @@ $ ./vtool --help
 A wonderful query tool for Victorialogs
 
 Usage:
-  victorialogs-tool [command]
+  vtool [command]
 
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
@@ -49,10 +49,10 @@ Available Commands:
   setcfg      Set up the configuration file for query logs
 
 Flags:
-  -h, --help     help for victorialogs-tool
+  -h, --help     help for vtool
   -t, --toggle   Help message for toggle
 
-Use "victorialogs-tool [command] --help" for more information about a command.
+Use "vtool [command] --help" for more information about a command.
 ```
 
 1. First, use the vtool setcfg command to set up the configuration file:
