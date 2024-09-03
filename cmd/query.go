@@ -20,8 +20,11 @@ var queryCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		tail, _ := cmd.Flags().GetBool("tail")
 		if tail {
-			// TODO leslie: tail the logs
-			fmt.Println("tail the logs")
+			// tail the logs
+			if err := internal.TailLogs(); err != nil {
+				fmt.Println("Error:", err)
+				return
+			}
 			return
 		}
 
