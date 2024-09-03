@@ -18,6 +18,14 @@ var queryCmd = &cobra.Command{
 	The query source comes from the configuration file set by the 'vtools setcfg' command.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
+		tail, _ := cmd.Flags().GetBool("tail")
+		if tail {
+			// TODO leslie: tail the logs
+			fmt.Println("tail the logs")
+			return
+		}
+
+		// just query the logs from the victoriametrics
 		list, err := internal.QueryLogs()
 		if err != nil {
 			fmt.Println("Error:", err)
@@ -33,4 +41,6 @@ var queryCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(queryCmd)
+
+	queryCmd.Flags().BoolP("tail", "t", false, "tail the logs")
 }
