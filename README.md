@@ -14,6 +14,7 @@ Query based on TOML configuration files and output the result set to the termina
 - Supports large time range queries (logs from several days, or even more, can be easily retrieved)
 - Based on TOML configuration files, allowing multiple configuration files for switching queries, similar to session storage.
 - Result set output to the terminal, allowing you to use tools like `grep`, `awk`, `>` and more
+- Supports tail query, real-time log viewing (`vtool query -t`)
 
 ## Installation
 
