@@ -81,9 +81,19 @@ func buildParams(cfg *cfgs.Config) string {
 	query += " _stream:" + "{service=" + `"` + cfg.Stream.Service + `"}`
 	query += " level:" + cfg.Level
 
-	query += " | fields " + strings.Join(cfg.Fileds, ",")
+	if len(cfg.Fileds) > 0 {
+		query += " | fields " + strings.Join(cfg.Fileds, ",")
+	} else {
+		query += " | fields *"
+	}
+
 	if cfg.Sort != "" {
 		query += " | sort by (_time) " + string(cfg.Sort)
+	}
+
+	// build custom pipes
+	if len(cfg.CustomPipes) > 0 {
+		query += " | " + strings.Join(cfg.CustomPipes, " | ")
 	}
 
 	fmt.Println("Query:", query)
