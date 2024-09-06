@@ -18,8 +18,9 @@ type Config struct {
 	Query string `toml:"query" json:"query"`
 	Level string `toml:"level" json:"level"`
 
-	Stream Stream   `toml:"stream" json:"_stream"`
-	Fileds []string `toml:"fileds" json:"fileds"`
+	Stream      Stream   `toml:"stream" json:"_stream"`
+	Fileds      []string `toml:"fileds" json:"fileds"`
+	CustomPipes []string `toml:"custom_pipes" json:"custom_pipes"`
 }
 
 type SortType string
