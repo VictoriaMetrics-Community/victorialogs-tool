@@ -13,6 +13,8 @@ Level = '*'
 
 fileds = ['_time', '_msg', 'caller', '*']
 
+custom_pipes = ['top 7 by (_stream)', 'sort by (_time) asc'] # custom_pipes, and it's up to you
+
 [stream]
     service = 'victoria'
 
