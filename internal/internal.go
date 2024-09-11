@@ -72,13 +72,17 @@ func splitRequest(cfg *cfgs.Config) []*cfgs.Config {
 func buildParams(cfg *cfgs.Config) string {
 	// build query params
 	var query string
-	query += "_time:" + cfg.LastDuration
+	if cfg.LastDuration != "" {
+		query += "_time:" + cfg.LastDuration
+	}
 	query += " " + cfg.Query
 	query += " topic:" + cfg.Topic
 	if cfg.Caller != "" {
 		query += " caller:" + cfg.Caller
 	}
-	query += " _stream:" + "{service=" + `"` + cfg.Stream.Service + `"}`
+	if cfg.Stream.Service != "" {
+		query += " _stream:" + "{service=" + `"` + cfg.Stream.Service + `"}`
+	}
 	query += " level:" + cfg.Level
 
 	if len(cfg.Fileds) > 0 {
@@ -111,11 +115,18 @@ func buildParams(cfg *cfgs.Config) string {
 		// time format to ts
 		start, _ = time.Parse(time.RFC3339, cfg.Start)
 	}
-	res += fmt.Sprintf("&start=%d", start.Unix())
 
+	// default end time is after 5 minutes
+	end := time.Now().Add(time.Minute * 5)
 	if cfg.End != "" {
 		// time format to ts
 		end, _ := time.Parse(time.RFC3339, cfg.End)
+		res += fmt.Sprintf("&end=%d", end.Unix())
+	}
+
+	if cfg.LastDuration != "" {
+		// only the last duration is set, the start time is the end time minus the last duration
+		res += fmt.Sprintf("&start=%d", start.Unix())
 		res += fmt.Sprintf("&end=%d", end.Unix())
 	}
 
