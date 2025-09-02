@@ -18,6 +18,9 @@ type Config struct {
 	Query string `toml:"query" json:"query"`
 	Level string `toml:"level" json:"level"`
 
+	// IgnoreOriQuery Whether to ignore the original statement, default is false
+	IgnoreOriQuery bool `toml:"ignore_ori_query" json:"ignore_ori_query"`
+
 	Stream      Stream   `toml:"stream" json:"_stream"`
 	Fileds      []string `toml:"fileds" json:"fileds"`
 	CustomPipes []string `toml:"custom_pipes" json:"custom_pipes"`

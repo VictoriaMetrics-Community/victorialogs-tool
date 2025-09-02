@@ -100,7 +100,9 @@ func buildParams(cfg *cfgs.Config) string {
 		query += " | " + strings.Join(cfg.CustomPipes, " | ")
 	}
 
-	fmt.Println("Query:", query)
+	if !cfg.IgnoreOriQuery {
+		fmt.Println("Query:", query)
+	}
 	// url encode
 	query = strings.ReplaceAll(url.QueryEscape(query), "+", "%20")
 
