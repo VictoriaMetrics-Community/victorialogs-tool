@@ -1,35 +1,38 @@
 # victorialogs-tool
-[English](https://github.com/VictoriaMetrics-Community/victorialogs-tool) | 简体中文
+[English](README.md) | 简体中文
 
-![image_01](image_01.jpg)
+![victorialogs-tool](image_01.jpg)
 
-一个用于查询 victoria-logs 的工具(你会爱上它)
+![victorialogs-tool 02](image_02.jpg)
 
-基于toml配置文件查询，将查询结果集输出至终端
+一个强大的 VictoriaLogs 查询命令行工具（你会爱上它）
+
+基于 TOML 配置文件查询 VictoriaLogs，将查询结果直接输出到终端。
 
 ## 特性
 
-- 简单易用的命令行界面
-- 多种组合查询方式
-- 支持大范围的时间查询(几天内的日志数据也可手到擒来，甚至更多)
-- 基于toml配置文件, 可多个配置文件切换查询，类似于session存储
-- 结果集输出至终端，可发挥你的想象力，配合`grep`、`awk`、`>`等工具使用
-- 支持tail查询，实时查看日志 (`vtool query -t`)
+- 简洁直观的命令行界面
+- 灵活的查询组合和过滤选项
+- 支持大范围时间查询（轻松处理数天的日志数据）
+- 基于 TOML 配置文件，支持多配置文件切换（类似会话功能）
+- 终端输出可与 Unix 工具无缝配合使用（如 `grep`、`awk`、重定向 `>` 等）
+- 支持 tail 模式实时查看日志（`vtool query -t`）
 
 ## 安装
 
-确保你的电脑已经安装了Go环境
+确保你的系统已安装 Go 环境。
 
-选项一:
+选项一：通过 go install 安装
 
 ```bash
 go install github.com/VictoriaMetrics-Community/victorialogs-tool@latest && mv $GOPATH/bin/victorialogs-tool $GOPATH/bin/vtool
 ```
 
-选项二:
+选项二：从源码构建
 
 ```bash
-git clone git@github.com:VictoriaMetrics-Community/victorialogs-tool.git
+git clone https://github.com/VictoriaMetrics-Community/victorialogs-tool.git
+cd victorialogs-tool
 make build
 ```
 
@@ -56,20 +59,32 @@ Flags:
 Use "vtool [command] --help" for more information about a command.
 ```
 
-1. 首先使用`vtool setcfg`命令设置配置文件
+### 快速开始
+
+1. 使用 `vtool setcfg` 设置配置文件
 
 ```bash
-vtool setcfg xxx/i-love-coding.toml
+vtool setcfg path/to/your/config.toml
 ```
 
-该命令会在家目录下生成一个`vtool.json`的文件, 用于存储配置文件的路径
+该命令会在用户主目录下创建 `vtool.json` 文件，用于存储配置文件路径。
 
-配置文件参考: https://github.com/VictoriaMetrics-Community/victorialogs-tool/blob/master/cfgs/example.toml
+2. 运行 `vtool query` 执行查询
 
-2. 运行`vtool query`即可
+```bash
+vtool query
+```
 
-*tips: 你可以使用`vtool currcfg`命令查看当前配置文件的绝对路径*
+**提示**：使用 `vtool currcfg` 查看当前配置文件的绝对路径。
+
+### 配置文件
+
+参考配置文件：https://github.com/VictoriaMetrics-Community/victorialogs-tool/blob/master/cfgs/example.toml
 
 ## 贡献
 
-欢迎提交PR
+欢迎贡献！请随时提交拉取请求。
+
+## 许可证
+
+本项目采用 MIT 许可证。
