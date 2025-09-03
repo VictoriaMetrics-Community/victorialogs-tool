@@ -69,21 +69,52 @@ func splitRequest(cfg *cfgs.Config) []*cfgs.Config {
 	return res
 }
 
-func buildParams(cfg *cfgs.Config) string {
+func buildParams(cfg *cfgs.Config) (string, error) {
 	// build query params
 	var query string
+
 	if cfg.LastDuration != "" {
 		query += "_time:" + cfg.LastDuration
 	}
+
 	query += " " + cfg.Query
-	query += " topic:" + cfg.Topic
+
+	if cfg.Topic != "" {
+		query += " topic:" + cfg.Topic
+	}
+
 	if cfg.Caller != "" {
 		query += " caller:" + cfg.Caller
 	}
-	if cfg.Stream.Service != "" {
-		query += " _stream:" + "{service=" + `"` + cfg.Stream.Service + `"}`
+
+	if cfg.Stream != nil {
+		byt, err := json.Marshal(cfg.Stream)
+		if err != nil {
+			return "", err
+		}
+
+		// Replace colons with equals signs only for JSON key-value separators
+		// This is more precise than replacing all colons
+		streamJson := string(byt)
+		// Replace ":" pattern between "key" and "value" with "="
+		// This handles the pattern: "key":"value" -> "key"="value"
+		var result strings.Builder
+		inQuotes := false
+		for i := 0; i < len(streamJson); i++ {
+			c := streamJson[i]
+			if c == '"' {
+				inQuotes = !inQuotes
+			} else if c == ':' && !inQuotes {
+				c = '='
+			}
+			result.WriteByte(c)
+		}
+		query += " _stream:" + result.String()
 	}
-	query += " level:" + cfg.Level
+
+	if cfg.Level != "" {
+		query += " level:" + cfg.Level
+	}
 
 	if len(cfg.Fileds) > 0 {
 		query += " | fields " + strings.Join(cfg.Fileds, ",")
@@ -132,5 +163,5 @@ func buildParams(cfg *cfgs.Config) string {
 		res += fmt.Sprintf("&end=%d", end.Unix())
 	}
 
-	return res
+	return res, nil
 }

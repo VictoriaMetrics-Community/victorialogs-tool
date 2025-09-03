@@ -20,7 +20,11 @@ func TailLogs() error {
 	cfg.URL = strings.Replace(cfg.URL, "query", "tail", 1)
 
 	// send request to victoria
-	req, err := http.NewRequest(http.MethodPost, cfg.URL, bytes.NewBufferString(buildParams(cfg)))
+	param, err := buildParams(cfg)
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPost, cfg.URL, bytes.NewBufferString(param))
 	if err != nil {
 		return err
 	}

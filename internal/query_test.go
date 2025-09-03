@@ -7,6 +7,10 @@ import (
 )
 
 func TestBuildParams(t *testing.T) {
+	stream := map[string]any{
+		"name": "leslie",
+		"age":  18,
+	}
 	cfg := &cfgs.Config{
 		URL:          "www.google.com",
 		Topic:        "prod*",
@@ -17,10 +21,12 @@ func TestBuildParams(t *testing.T) {
 		Limit:        10,
 		Query:        "_msg:'leslie'",
 		Level:        "*",
-		Stream: cfgs.Stream{
-			Service: "search",
-		},
-		Fileds: []string{"_msg", "_time", "*"},
+		Stream:       stream,
+		Fileds:       []string{"_msg", "_time", "*"},
 	}
-	_ = buildParams(cfg)
+
+	_, err := buildParams(cfg)
+	if err != nil {
+		t.Errorf("buildParams() error = %v", err)
+	}
 }

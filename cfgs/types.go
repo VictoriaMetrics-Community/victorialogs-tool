@@ -21,9 +21,9 @@ type Config struct {
 	// IgnoreOriQuery Whether to ignore the original statement, default is false
 	IgnoreOriQuery bool `toml:"ignore_ori_query" json:"ignore_ori_query"`
 
-	Stream      Stream   `toml:"stream" json:"_stream"`
-	Fileds      []string `toml:"fileds" json:"fileds"`
-	CustomPipes []string `toml:"custom_pipes" json:"custom_pipes"`
+	Stream      map[string]any `toml:"stream" json:"_stream"`
+	Fileds      []string       `toml:"fileds" json:"fileds"`
+	CustomPipes []string       `toml:"custom_pipes" json:"custom_pipes"`
 }
 
 type SortType string
@@ -32,10 +32,6 @@ const (
 	SortTypeAsc  SortType = "asc"
 	SortTypeDesc SortType = "desc"
 )
-
-type Stream struct {
-	Service string `toml:"service"`
-}
 
 type RequestParams struct {
 	// 查询语句

@@ -55,7 +55,11 @@ func QueryLogs() ([]string, error) {
 }
 
 func reqToVictoria(cfg *cfgs.Config) (string, error) {
-	req, err := http.NewRequest(http.MethodPost, cfg.URL, bytes.NewBufferString(buildParams(cfg)))
+	param, err := buildParams(cfg)
+	if err != nil {
+		return "", err
+	}
+	req, err := http.NewRequest(http.MethodPost, cfg.URL, bytes.NewBufferString(param))
 	if err != nil {
 		return "", err
 	}
